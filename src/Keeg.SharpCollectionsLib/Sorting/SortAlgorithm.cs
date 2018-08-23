@@ -74,7 +74,7 @@ namespace Keeg.SharpCollectionsLib.Sorting
                 throw new ArgumentOutOfRangeException(nameof(start));
             }
 
-            if (start + count > list.Count)
+            if (list.Count - start < count)
             {
                 throw new ArgumentException($"{nameof(start)} plus {nameof(count)} is out of list range.");
             }

@@ -55,9 +55,13 @@ namespace Keeg.SharpCollectionsLib.Sorting
         /// <param name="list">The <see cref="IList{T}"/> of objects to be sorted.</param>
         /// <param name="start">The starting index of the first object to sort.</param>
         /// <param name="count">The number of objects to include in the sort.</param>
-        /// <exception cref="ArgumentNullException"></exception>
-        /// <exception cref="ArgumentOutOfRangeException"></exception>
-        /// <exception cref="ArgumentException"></exception>
+        /// <exception cref="ArgumentNullException">Thrown when <see cref="IList{T}"/> passed in is null.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// Thrown when start is less than zero or greater than the size of the list.
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        /// Thrown when the start plus the count is greater than the size of the list.
+        /// </exception>
         protected void SortValidationCheck(IList<T> list, int start, int count)
         {
             if (list == null)
@@ -87,7 +91,8 @@ namespace Keeg.SharpCollectionsLib.Sorting
         }
 
         /// <summary>
-        /// Sorts the entire <see cref="IList{T}"/> in place using the <see cref="Comparer"/>.
+        /// Sorts the entire <see cref="IList{T}"/> in place using the <see cref="Comparer"/> when 
+        /// implemented in a derived class.
         /// </summary>
         /// <param name="list">The <see cref="IList{T}"/> of objects to be sorted.</param>
         /// <param name="start">The starting index of the first object to sort.</param>

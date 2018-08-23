@@ -46,6 +46,7 @@
     <Compile Include="Common\Utils.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Sorting\BubbleSort.cs" />
+    <Compile Include="Sorting\InsertionSort.cs" />
     <Compile Include="Sorting\ISortAlgorithm.cs" />
     <Compile Include="Sorting\SortAlgorithm.cs" />
   </ItemGroup>

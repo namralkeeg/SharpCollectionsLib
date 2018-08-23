@@ -1,40 +1,37 @@
 ﻿using System;
 using System.Collections.Generic;
-using static Keeg.SharpCollectionsLib.Common.Utils;
 
 namespace Keeg.SharpCollectionsLib.Sorting
 {
     /// <summary>
-    /// A Bubble Sort implementation of the <see cref="ISortAlgorithm{T}"/> interface.
+    /// An Insertion sort implementation of the <see cref="ISortAlgorithm{T}"/> interface.
     /// </summary>
-    /// <typeparam name="T">The type of objects to sort.</typeparam>
-    /// <remarks>Includes an optimization where by after every pass, all elements after the 
-    /// last swap are sorted, and do not need to be checked again</remarks>
-    public sealed class BubbleSort<T> : SortAlgorithm<T> where T : IComparable<T>
+    /// <typeparam name="T">The type of objects to sort. Must implement <see cref="IComparable{T}"/>.</typeparam>
+    public class InsertionSort<T> : SortAlgorithm<T> where T : IComparable<T>
     {
         #region Constructors
         /// <summary>
-        /// Initializes a <see cref="BubbleSort{T}"/> class.
+        /// Initializes a <see cref="InsertionSort{T}"/> class.
         /// </summary>
         /// <remarks>
         /// Defaults the <see cref="Comparer"/> to a <see cref="Comparer{T}.Default"/>
         /// which should be the <see cref="IComparable{T}"/> implementation for T.
         /// </remarks>
-        public BubbleSort()
+        public InsertionSort()
         {
         }
 
         /// <summary>
-        /// Initializes a <see cref="BubbleSort{T}"/> class.
+        /// Initializes a <see cref="InsertionSort{T}"/> class.
         /// </summary>
         /// <param name="comparer">The <see cref="IComparer{T}"/> to use for all sorting comparisons.</param>
-        public BubbleSort(IComparer<T> comparer) : base(comparer)
+        public InsertionSort(IComparer<T> comparer) : base(comparer)
         {
         }
         #endregion
 
         /// <summary>
-        /// Sorts the entire <see cref="IList{T}"/> in place using the Bubble Sort algorithm.
+        /// Sorts the entire <see cref="IList{T}"/> in place using the Insertion Sort algorithm.
         /// </summary>
         /// <param name="list">The <see cref="IList{T}"/> of objects to be sorted.</param>
         /// <param name="start">The starting index of the first object to sort.</param>
@@ -44,23 +41,18 @@ namespace Keeg.SharpCollectionsLib.Sorting
         {
             SortValidationCheck(list, start, count);
 
-            int itemsLeft = count;
-            int lastSwapped;
-            do
+            int i, j;
+
+            for (i = start + 1; i < count; i++)
             {
-                lastSwapped = 0;
-                for (int i = start + 1; i < start + count; i++)
+                T item = list[i];
+                for (j = i - 1; (j >= 0) && (Comparer.Compare(list[j], item) > 0); j--)
                 {
-                    if (Comparer.Compare(list[i - 1], list[i]) > 0)
-                    {
-                        Swap(list, i - 1, i);
-                        lastSwapped = i;
-                    }
+                    list[j + 1] = list[j];
                 }
 
-                itemsLeft = lastSwapped;
-
-            } while (itemsLeft > 0);
+                list[j + 1] = item;
+            }
 
             return list;
         }

@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.27703.2047
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Keeg.SharpCollectionsLib", "src\Keeg.SharpCollectionsLib\Keeg.SharpCollectionsLib.csproj", "{D65D774F-BE2D-4C99-AE47-DD60AC665B47}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Keeg.SharpCollectionsLib.Tests", "test\Keeg.SharpCollectionsLib.Tests\Keeg.SharpCollectionsLib.Tests.csproj", "{C3EA227A-2328-4CEA-8D37-9173309B130F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{D65D774F-BE2D-4C99-AE47-DD60AC665B47}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D65D774F-BE2D-4C99-AE47-DD60AC665B47}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D65D774F-BE2D-4C99-AE47-DD60AC665B47}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C3EA227A-2328-4CEA-8D37-9173309B130F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C3EA227A-2328-4CEA-8D37-9173309B130F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C3EA227A-2328-4CEA-8D37-9173309B130F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C3EA227A-2328-4CEA-8D37-9173309B130F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

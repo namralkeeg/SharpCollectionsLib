@@ -69,7 +69,7 @@ namespace Keeg.SharpCollectionsLib.Sorting
         private int GetMax(IList<T> list, int start, int count)
         {
             int maxValue = 0;
-            for (int i = start; i < count; i++)
+            for (int i = start; i < start + count; i++)
             {
                 var key = _getKey(list[i]);
                 if (key < 0)
@@ -100,7 +100,7 @@ namespace Keeg.SharpCollectionsLib.Sorting
             var countBucket = new int[maxValue + 1];
 
             // Store the count for each key.
-            for (int i = start; i < count; i++)
+            for (int i = start; i < start + count; i++)
             {
                 countBucket[_getKey(list[i])]++;
             }
@@ -116,7 +116,7 @@ namespace Keeg.SharpCollectionsLib.Sorting
             var sortedArray = new T[count];
 
             // Build the output array
-            for (int i = start; i < count; i++)
+            for (int i = start; i < start + count; i++)
             {
                 sortedArray[countBucket[_getKey(list[i])] - 1] = list[i];
                 --countBucket[_getKey(list[i])];
@@ -124,7 +124,7 @@ namespace Keeg.SharpCollectionsLib.Sorting
 
             int sortedIndex = 0;
             // Copy the sorted array back to the original.
-            for (int i = start; i < count; i++)
+            for (int i = start; i < start + count; i++)
             {
                 list[i] = sortedArray[sortedIndex++];
             }

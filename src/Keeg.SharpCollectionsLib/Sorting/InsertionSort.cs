@@ -43,7 +43,7 @@ namespace Keeg.SharpCollectionsLib.Sorting
 
             int i, j;
 
-            for (i = start + 1; i < count; i++)
+            for (i = start + 1; i < start + count; i++)
             {
                 T item = list[i];
                 for (j = i - 1; (j >= 0) && (Comparer.Compare(list[j], item) > 0); j--)

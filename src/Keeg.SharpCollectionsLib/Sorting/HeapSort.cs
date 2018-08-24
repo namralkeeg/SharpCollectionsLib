@@ -78,13 +78,13 @@ namespace Keeg.SharpCollectionsLib.Sorting
             SortValidationCheck(list, start, count);
 
             // Build a max heap.
-            for (int i = (count >> 1) - 1; i >= start; i--)
+            for (int i = ((start + count) >> 1) - 1; i >= start; i--)
             {
                 Heapify(list, i, count);
             }
 
             // Extract an element from the heap one at a time.
-            for (int j = count - 1; j >= start; j--)
+            for (int j = start + count - 1; j >= start; j--)
             {
                 // Move the current root to the end.
                 Swap(list, j, start);

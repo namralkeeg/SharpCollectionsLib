@@ -41,11 +41,11 @@ namespace Keeg.SharpCollectionsLib.Sorting
         {
             SortValidationCheck(list, start, count);
 
-            for (int cyclePosition = start; cyclePosition < count - 1; cyclePosition++)
+            for (int cyclePosition = start; cyclePosition < start + count; cyclePosition++)
             {
                 var item = list[cyclePosition];
                 int position = cyclePosition;
-                for (int i = cyclePosition + 1; i < count; i++)
+                for (int i = cyclePosition + 1; i < start + count; i++)
                 {
                     if (Comparer.Compare(list[i], item) < 0)
                     {

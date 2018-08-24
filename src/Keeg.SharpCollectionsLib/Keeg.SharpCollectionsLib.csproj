@@ -51,6 +51,7 @@
     <Compile Include="Sorting\CycleSort.cs" />
     <Compile Include="Sorting\HeapSort.cs" />
     <Compile Include="Sorting\InsertionSort.cs" />
+    <Compile Include="Sorting\IntroSort.cs" />
     <Compile Include="Sorting\ISortAlgorithm.cs" />
     <Compile Include="Sorting\MergeSort.cs" />
     <Compile Include="Sorting\QuickSort.cs" />

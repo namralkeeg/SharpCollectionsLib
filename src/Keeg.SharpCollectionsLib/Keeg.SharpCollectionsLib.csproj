@@ -55,6 +55,7 @@
     <Compile Include="Sorting\MergeSort.cs" />
     <Compile Include="Sorting\QuickSort.cs" />
     <Compile Include="Sorting\SelectionSort.cs" />
+    <Compile Include="Sorting\ShellSort.cs" />
     <Compile Include="Sorting\SortAlgorithm.cs" />
   </ItemGroup>
   <ItemGroup />

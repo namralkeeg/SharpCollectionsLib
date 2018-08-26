@@ -6,12 +6,12 @@ using Xunit;
 
 namespace Keeg.SharpCollectionsLib.Tests.Sorting
 {
-    public class QuickSortTests
+    public class QuickSortParallelTests
     {
         internal static int[] testArraySmall = { 1, 9, 2, 8, 3, 7, 4, 6, 5, 0, 10, 12, 14, 13, 11 };
         internal static int[] testArrayMedium = { 1, 9, 2, 8, 18, 7, 19, 6, 5, 10, 0, 12, 14, 16, 3, 4, 17, 15, 11, 13 };
-        internal static ISortAlgorithm<int> defaultSort = new QuickSort<int>();
-        internal static ISortAlgorithm<int> customSort = new QuickSort<int>(new SortCustomComparer());
+        internal static ISortAlgorithm<int> defaultSort = new QuickSortParallel<int>();
+        internal static ISortAlgorithm<int> customSort = new QuickSortParallel<int>(new SortCustomComparer());
 
         internal class SortCustomComparer : Comparer<int>
         {

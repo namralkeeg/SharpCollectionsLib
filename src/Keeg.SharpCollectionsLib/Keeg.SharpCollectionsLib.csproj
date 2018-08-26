@@ -55,6 +55,7 @@
     <Compile Include="Sorting\ISortAlgorithm.cs" />
     <Compile Include="Sorting\MergeSort.cs" />
     <Compile Include="Sorting\QuickSort.cs" />
+    <Compile Include="Sorting\QuickSortParallel.cs" />
     <Compile Include="Sorting\RadixSort.cs" />
     <Compile Include="Sorting\SelectionSort.cs" />
     <Compile Include="Sorting\ShellSort.cs" />

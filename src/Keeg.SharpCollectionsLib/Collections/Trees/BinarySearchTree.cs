@@ -25,7 +25,7 @@ namespace Keeg.SharpCollectionsLib.Collections.Trees
         #endregion
 
         #region Instance Fields
-        private BinaryTreeNode<T> _root;
+        private BinarySearchTreeNode _root;
         private IComparer<T> _comparer;
         private int _count;
         private long _version;
@@ -137,7 +137,7 @@ namespace Keeg.SharpCollectionsLib.Collections.Trees
             // If the tree is empty add it to the root.
             if (_root == null)
             {
-                _root = new BinaryTreeNode<T>(item);
+                _root = new BinarySearchTreeNode(item);
                 _count++;
                 _version++;
                 return;
@@ -158,7 +158,7 @@ namespace Keeg.SharpCollectionsLib.Collections.Trees
                     // If less than the current node and there's no left child add it.
                     if (current.Left == null)
                     {
-                        current.Left = new BinaryTreeNode<T>(current, item);
+                        current.Left = new BinarySearchTreeNode(current, item);
                         _count++;
                         break;
                     }
@@ -171,7 +171,7 @@ namespace Keeg.SharpCollectionsLib.Collections.Trees
                     // If greater than the current node and there's no right child add it.
                     if (current.Right == null)
                     {
-                        current.Right = new BinaryTreeNode<T>(current, item);
+                        current.Right = new BinarySearchTreeNode(current, item);
                         _count++;
                         break;
                     }
@@ -356,7 +356,7 @@ namespace Keeg.SharpCollectionsLib.Collections.Trees
             return new ReverseOrderEnumerator(this);
         }
 
-        private T GetSmallestValue(BinaryTreeNode<T> node)
+        private T GetSmallestValue(BinarySearchTreeNode node)
         {
             var current = node;
             while (current.Left != null)
@@ -367,7 +367,7 @@ namespace Keeg.SharpCollectionsLib.Collections.Trees
             return current.Value;
         }
 
-        private BinaryTreeNode<T> RemoveNode(BinaryTreeNode<T> node, T item)
+        private BinarySearchTreeNode RemoveNode(BinarySearchTreeNode node, T item)
         {
             if (node == null)
             {
@@ -457,7 +457,7 @@ namespace Keeg.SharpCollectionsLib.Collections.Trees
         #endregion
 
         #region Binary Tree Specific Functions
-        private int GetHeight(BinaryTreeNode<T> node)
+        private int GetHeight(BinarySearchTreeNode node)
         {
             if (node == null)
             {
@@ -467,7 +467,7 @@ namespace Keeg.SharpCollectionsLib.Collections.Trees
             return 1 + Math.Max(GetHeight(node.Left), GetHeight(node.Right));
         }
 
-        private int GetLeafCount(BinaryTreeNode<T> node)
+        private int GetLeafCount(BinarySearchTreeNode node)
         {
             if (node == null)
             {
@@ -498,7 +498,7 @@ namespace Keeg.SharpCollectionsLib.Collections.Trees
             return maxWidth;
         }
 
-        private int GetWidth(BinaryTreeNode<T> node, int depth)
+        private int GetWidth(BinarySearchTreeNode node, int depth)
         {
             if (node == null)
             {
@@ -513,7 +513,7 @@ namespace Keeg.SharpCollectionsLib.Collections.Trees
             return GetWidth(node.Left, depth - 1) + GetWidth(node.Right, depth - 1);
         }
 
-        private void TraverseTreePreOrder(Action<T> action, BinaryTreeNode<T> node)
+        private void TraverseTreePreOrder(Action<T> action, BinarySearchTreeNode node)
         {
             if (node == null)
             {
@@ -544,7 +544,7 @@ namespace Keeg.SharpCollectionsLib.Collections.Trees
             TraverseTreePreOrder(action, _root);
         }
 
-        private void TraverseTreePostOrder(Action<T> action, BinaryTreeNode<T> node)
+        private void TraverseTreePostOrder(Action<T> action, BinarySearchTreeNode node)
         {
             if (node == null)
             {
@@ -575,7 +575,7 @@ namespace Keeg.SharpCollectionsLib.Collections.Trees
             TraverseTreePostOrder(action, _root);
         }
 
-        private void TraverseBinaryTreeInOrder(Action<T> action, BinaryTreeNode<T> node)
+        private void TraverseBinaryTreeInOrder(Action<T> action, BinarySearchTreeNode node)
         {
             if (node == null)
             {
@@ -606,7 +606,7 @@ namespace Keeg.SharpCollectionsLib.Collections.Trees
             TraverseBinaryTreeInOrder(action, _root);
         }
 
-        private void TraverseBinaryTreeInReverseOrder(Action<T> action, BinaryTreeNode<T> node)
+        private void TraverseBinaryTreeInReverseOrder(Action<T> action, BinarySearchTreeNode node)
         {
             if (node == null)
             {
@@ -638,13 +638,13 @@ namespace Keeg.SharpCollectionsLib.Collections.Trees
         }
         #endregion
 
-        #region Internal Enumerator Structs
+        #region Internal Support Classes
         public struct ReverseOrderEnumerator : IEnumerator<T>
         {
             #region Instance Fields
             private readonly BinarySearchTree<T> _tree;
-            private readonly BinaryTreeNode<T> _root;
-            private readonly Stack<BinaryTreeNode<T>> _nodeStack;
+            private readonly BinarySearchTreeNode _root;
+            private readonly Stack<BinarySearchTreeNode> _nodeStack;
             private readonly long _version;
             private T _current;
             #endregion
@@ -653,13 +653,13 @@ namespace Keeg.SharpCollectionsLib.Collections.Trees
             {
                 _tree = tree ?? throw new ArgumentNullException(nameof(tree));
                 _root = _tree._root;
-                _nodeStack = new Stack<BinaryTreeNode<T>>();
+                _nodeStack = new Stack<BinarySearchTreeNode>();
                 _version = _tree._version;
                 _current = default(T);
                 StackRightMostNodesFirst(_root);
             }
 
-            private void StackRightMostNodesFirst(BinaryTreeNode<T> node)
+            private void StackRightMostNodesFirst(BinarySearchTreeNode node)
             {
                 var current = node;
                 while (current != null)
@@ -706,8 +706,8 @@ namespace Keeg.SharpCollectionsLib.Collections.Trees
         {
             #region Instance Fields
             private readonly BinarySearchTree<T> _tree;
-            private readonly BinaryTreeNode<T> _root;
-            private readonly Stack<BinaryTreeNode<T>> _nodeStack;
+            private readonly BinarySearchTreeNode _root;
+            private readonly Stack<BinarySearchTreeNode> _nodeStack;
             private readonly long _version;
             private T _current;
             #endregion
@@ -716,7 +716,7 @@ namespace Keeg.SharpCollectionsLib.Collections.Trees
             { 
                 _tree = tree ?? throw new ArgumentNullException(nameof(tree));
                 _root = tree._root;
-                _nodeStack = new Stack<BinaryTreeNode<T>>();
+                _nodeStack = new Stack<BinarySearchTreeNode>();
                 _version = _tree._version;
                 _current = default(T);
                 StackLeftMostNodesFirst(_root);
@@ -725,7 +725,7 @@ namespace Keeg.SharpCollectionsLib.Collections.Trees
             public T Current => _current;
             object IEnumerator.Current => _current;
 
-            private void StackLeftMostNodesFirst(BinaryTreeNode<T> node)
+            private void StackLeftMostNodesFirst(BinarySearchTreeNode node)
             {
                 var current = node;
                 while (current != null)
@@ -763,6 +763,43 @@ namespace Keeg.SharpCollectionsLib.Collections.Trees
                 _nodeStack.Clear();
                 StackLeftMostNodesFirst(_root);
             }
+        }
+
+        internal class BinarySearchTreeNode : BinaryTreeNode<BinarySearchTreeNode, T>
+        {
+            #region Constructors
+
+            public BinarySearchTreeNode()
+            {
+            }
+
+            public BinarySearchTreeNode(T value) : base(value)
+            {
+            }
+
+            public BinarySearchTreeNode(BinarySearchTreeNode parent, T value) : base(parent, value)
+            {
+            }
+
+            public BinarySearchTreeNode(BinarySearchTreeNode left, BinarySearchTreeNode right, T value) : base(left, right, value)
+            {
+            }
+
+            public BinarySearchTreeNode(BinarySearchTreeNode parent, BinarySearchTreeNode left, BinarySearchTreeNode right, T value) : base(parent, left, right, value)
+            {
+            }
+
+            #endregion
+
+            /// <summary>
+            /// Gets if the node is a left child.
+            /// </summary>
+            internal virtual bool IsLeftChild => (Parent == null) ? false : Parent.Left == this;
+
+            /// <summary>
+            /// Gets if the node is a right child.
+            /// </summary>
+            internal virtual bool IsRightChild => (Parent == null) ? false : Parent.Right == this;
         }
         #endregion
     }

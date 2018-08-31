@@ -10,33 +10,42 @@ namespace Keeg.SharpCollectionsLib.Collections.Trees
     /// A Binary Search Tree implemenatation of the <see cref="IBinarySearchTree{T}"/> interface.
     /// </summary>
     /// <typeparam name="T">The type of objects to store in the binary search tree.</typeparam>
-    /// <remarks>
-    /// For a detailed description of the algorithm, take a look at "Algorithms" by Robert Sedgewick.
-    /// </remarks>
     public class BinarySearchTree<T> : IBinarySearchTree<T> where T : IComparable<T>
     {
         #region Constants
+
         private const string _AddDuplicateMessage = "Attempted to add duplicate item.";
-        private const string _InvalidArrayTypeMessage = "Invalid array type.";
-        private const string _StartIndexZeroGreaterMessage = "Starting index must be 0 or greater.";
-        private const string _DestArraySizeTooSmallMessage = "Destination array size is too small.";
         private const string _ArrayNonZeroLBMessage = "Array has a non-zero lower bound.";
+        private const string _DestArraySizeTooSmallMessage = "Destination array size is too small.";
+        private const string _InvalidArrayTypeMessage = "Invalid array type.";
         private const string _OnlySingleDimArraysMessage = "Only single dimensional arrays are supported.";
-        #endregion
+        private const string _StartIndexZeroGreaterMessage = "Starting index must be 0 or greater.";
+
+        #endregion Constants
 
         #region Instance Fields
-        private BinarySearchTreeNode _root;
+
         private IComparer<T> _comparer;
         private int _count;
-        private long _version;
+        private BinarySearchTreeNode _root;
         private object _syncRoot;
-        #endregion
+        private long _version;
+
+        #endregion Instance Fields
 
         #region Constructors
+
+        /// <summary>
+        /// Initializes a <see cref="BinarySearchTree{T}"/> class.
+        /// </summary>
         public BinarySearchTree() : this(Comparer<T>.Default)
         {
         }
 
+        /// <summary>
+        /// Initializes a <see cref="BinarySearchTree{T}"/> class.
+        /// </summary>
+        /// <param name="comparer">The <see cref="IComparer{T}"/> to use for all comparisons.</param>
         public BinarySearchTree(IComparer<T> comparer)
         {
             _count = 0;
@@ -44,10 +53,19 @@ namespace Keeg.SharpCollectionsLib.Collections.Trees
             _comparer = comparer ?? Comparer<T>.Default;
         }
 
-        public BinarySearchTree(IEnumerable<T> collection) : this (collection, null)
+        /// <summary>
+        /// Initializes a <see cref="BinarySearchTree{T}"/> class.
+        /// </summary>
+        /// <param name="collection">An <see cref="IEnumerable{T}"/> collection of objects to initialize the tree with.</param>
+        public BinarySearchTree(IEnumerable<T> collection) : this(collection, null)
         {
         }
 
+        /// <summary>
+        /// Initializes a <see cref="BinarySearchTree{T}"/> class.
+        /// </summary>
+        /// <param name="collection">An <see cref="IEnumerable{T}"/> collection of objects to initialize the tree with.</param>
+        /// <param name="comparer">The <see cref="IComparer{T}"/> to use for all comparisons.</param>
         public BinarySearchTree(IEnumerable<T> collection, IComparer<T> comparer)
         {
             if (collection == null)
@@ -64,9 +82,11 @@ namespace Keeg.SharpCollectionsLib.Collections.Trees
                 Add(item);
             }
         }
-        #endregion
+
+        #endregion Constructors
 
         #region Properties
+
         /// <summary>
         /// Gets and sets the <see cref="IComparer{T}"/> used for comparing elements in a binary tree.
         /// </summary>
@@ -82,6 +102,12 @@ namespace Keeg.SharpCollectionsLib.Collections.Trees
         public int Count => _count;
 
         /// <summary>
+        /// Gets the height of a binary tree.
+        /// </summary>
+        /// <value>The height of a binary tree is the number of edges between the tree's root and its furthest leaf.</value>
+        public int Height => GetHeight(_root);
+
+        /// <summary>
         /// A read-only property that tells if this collection is read-only.
         /// </summary>
         public bool IsReadOnly => false;
@@ -90,6 +116,12 @@ namespace Keeg.SharpCollectionsLib.Collections.Trees
         /// A read-only property that tells if the collection is synchronized.
         /// </summary>
         public bool IsSynchronized => false;
+
+        /// <summary>
+        /// Gets the count of leaf nodes in the binary tree.
+        /// </summary>
+        /// <value>The total number of leaf nodes in the tree.</value>
+        public int LeafCount => GetLeafCount(_root);
 
         /// <summary>
         /// Gets the synchronization root for this object.
@@ -108,25 +140,15 @@ namespace Keeg.SharpCollectionsLib.Collections.Trees
         }
 
         /// <summary>
-        /// Gets the height of a binary tree.
-        /// </summary>
-        /// <value>The height of a binary tree is the number of edges between the tree's root and its furthest leaf.</value>
-        public int Height => GetHeight(_root);
-
-        /// <summary>
-        /// Gets the count of leaf nodes in the binary tree.
-        /// </summary>
-        /// <value>The total number of leaf nodes in the tree.</value>
-        public int LeafCount => GetLeafCount(_root);
-
-        /// <summary>
         /// Gets the maximum width of a binary tree.
         /// </summary>
         /// <value>The maximum width of the tree at all levels.</value>
         public int Width => GetWidth();
-        #endregion
+
+        #endregion Properties
 
         #region ICollection<T> Implementation
+
         /// <summary>
         /// Adds an item to the Binary Search Tree.
         /// </summary>
@@ -225,10 +247,10 @@ namespace Keeg.SharpCollectionsLib.Collections.Trees
         }
 
         /// <summary>
-        /// Copies the elements of the <see cref="BinarySearchTree{T}"/> to an <see cref="Array"/>, 
+        /// Copies the elements of the <see cref="BinarySearchTree{T}"/> to an <see cref="Array"/>,
         /// starting at a particular <see cref="Array"/> index.
         /// </summary>
-        /// <param name="array">The one-dimensional <see cref="Array"/> that is the destination of the elements copied from 
+        /// <param name="array">The one-dimensional <see cref="Array"/> that is the destination of the elements copied from
         /// <see cref="BinarySearchTree{T}"/>. The <see cref="Array"/> must have zero-based indexing.</param>
         /// <param name="index">The zero-based index in array at which copying begins.</param>
         public void CopyTo(Array array, int index)
@@ -303,7 +325,7 @@ namespace Keeg.SharpCollectionsLib.Collections.Trees
         /// Copies the <see cref="BinarySearchTree{T}"/> elements to an existing one-dimensional <see cref="Array"/>,
         /// starting at the specified array index.
         /// </summary>
-        /// <param name="array">The one-dimensional <see cref="Array"/> that is the destination of the elements copied 
+        /// <param name="array">The one-dimensional <see cref="Array"/> that is the destination of the elements copied
         /// from <see cref="BinarySearchTree{T}"/>. The Array must have zero-based indexing.</param>
         /// <param name="arrayIndex">The zero-based index in array at which copying begins.</param>
         public void CopyTo(T[] array, int arrayIndex)
@@ -348,12 +370,53 @@ namespace Keeg.SharpCollectionsLib.Collections.Trees
         }
 
         /// <summary>
+        /// Returns an enumerator that iterates through the collection.
+        /// </summary>
+        /// <returns>An <see cref="IEnumerator"/> that can be used to iterate through the collection.</returns>
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return new InOrderEnumerator(this);
+        }
+
+        /// <summary>
         /// Returns an enumerator that iterates through the collection in reverse order.
         /// </summary>
         /// <returns>An <see cref="IEnumerator{T}"/> that can be used to iterate through the collection in reverse.</returns>
         public IEnumerator<T> GetReverseEnumerator()
         {
             return new ReverseOrderEnumerator(this);
+        }
+
+        /// <summary>
+        /// Removes the first occurrence of a specific object from the <see cref="BinarySearchTree{T}"/>.
+        /// </summary>
+        /// <param name="item">The object to remove from the <see cref="BinarySearchTree{T}"/>.</param>
+        /// <returns>
+        /// <see cref="true"/> if item was successfully removed from the ICollection<T>; otherwise, <see cref="false"/>.
+        /// This method also returns <see cref="false"/> if item is not found in the original <see cref="BinarySearchTree{T}"/>.
+        /// </returns>
+        public bool Remove(T item)
+        {
+            // The tree is empty.
+            if (_root == null)
+            {
+                return false;
+            }
+
+            // The item was found, now remove it.
+            if (Contains(item))
+            {
+                // Call internal recursive delete, and return the rebuilt tree with the item removed.
+                _root = RemoveNode(_root, item);
+                _count--;
+                _version++;
+                return true;
+            }
+            else
+            {
+                // The item isn't in the tree.
+                return false;
+            }
         }
 
         private T GetSmallestValue(BinarySearchTreeNode node)
@@ -385,7 +448,7 @@ namespace Keeg.SharpCollectionsLib.Collections.Trees
                 node.Right = RemoveNode(node.Right, item);
             }
             else // (compareResult == 0)
-            {   
+            {
                 // If it's a leaf node then remove it.
                 if (node.IsLeaf)
                 {
@@ -414,49 +477,86 @@ namespace Keeg.SharpCollectionsLib.Collections.Trees
             return node;
         }
 
-        /// <summary>
-        /// Removes the first occurrence of a specific object from the <see cref="BinarySearchTree{T}"/>.
-        /// </summary>
-        /// <param name="item">The object to remove from the <see cref="BinarySearchTree{T}"/>.</param>
-        /// <returns>
-        /// <see cref="true"/> if item was successfully removed from the ICollection<T>; otherwise, <see cref="false"/>. 
-        /// This method also returns <see cref="false"/> if item is not found in the original <see cref="BinarySearchTree{T}"/>.
-        /// </returns>
-        public bool Remove(T item)
-        {
-            // The tree is empty.
-            if (_root == null)
-            {
-                return false;
-            }
-            
-            // The item was found, now remove it.
-            if (Contains(item))
-            {
-                // Call internal recursive delete, and return the rebuilt tree with the item removed.
-                _root = RemoveNode(_root, item);
-                _count--;
-                _version++;
-                return true;
-            }
-            else
-            {
-                // The item isn't in the tree.
-                return false;
-            }
-        }
-
-        /// <summary>
-        /// Returns an enumerator that iterates through the collection.
-        /// </summary>
-        /// <returns>An <see cref="IEnumerator"/> that can be used to iterate through the collection.</returns>
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return new InOrderEnumerator(this);
-        }
-        #endregion
+        #endregion ICollection<T> Implementation
 
         #region Binary Tree Specific Functions
+
+        /// <summary>
+        /// Traverses the <see cref="BinarySearchTree{T}"/> in order and applies the delegate action to each node.
+        /// </summary>
+        /// <param name="action">The delegate action to apply to each node.</param>
+        public void TraverseBinaryTreeInOrder(Action<T> action)
+        {
+            if (action == null)
+            {
+                throw new ArgumentNullException(nameof(action));
+            }
+
+            if (_root == null)
+            {
+                return;
+            }
+
+            TraverseBinaryTreeInOrder(action, _root);
+        }
+
+        /// <summary>
+        /// Traverses the <see cref="BinarySearchTree{T}"/> in reverse order and applies the delegate action to each node.
+        /// </summary>
+        /// <param name="action">The delegate action to apply to each node.</param>
+        public void TraverseBinaryTreeInReverseOrder(Action<T> action)
+        {
+            if (action == null)
+            {
+                throw new ArgumentNullException(nameof(action));
+            }
+
+            if (_root == null)
+            {
+                return;
+            }
+
+            TraverseBinaryTreeInReverseOrder(action, _root);
+        }
+
+        /// <summary>
+        /// Traverses the <see cref="BinarySearchTree{T}"/> in post-order (LRN) and applies the delegate action to each node.
+        /// </summary>
+        /// <param name="action">The delegate action to apply to each node.</param>
+        public void TraverseTreePostOrder(Action<T> action)
+        {
+            if (action == null)
+            {
+                throw new ArgumentNullException(nameof(action));
+            }
+
+            if (_root == null)
+            {
+                return;
+            }
+
+            TraverseTreePostOrder(action, _root);
+        }
+
+        /// <summary>
+        /// Traverses the <see cref="BinarySearchTree{T}"/> in pre-order (NLR) and applies the delegate action to each node.
+        /// </summary>
+        /// <param name="action">The delegate action to apply to each node.</param>
+        public void TraverseTreePreOrder(Action<T> action)
+        {
+            if (action == null)
+            {
+                throw new ArgumentNullException(nameof(action));
+            }
+
+            if (_root == null)
+            {
+                return;
+            }
+
+            TraverseTreePreOrder(action, _root);
+        }
+
         private int GetHeight(BinarySearchTreeNode node)
         {
             if (node == null)
@@ -513,68 +613,6 @@ namespace Keeg.SharpCollectionsLib.Collections.Trees
             return GetWidth(node.Left, depth - 1) + GetWidth(node.Right, depth - 1);
         }
 
-        private void TraverseTreePreOrder(Action<T> action, BinarySearchTreeNode node)
-        {
-            if (node == null)
-            {
-                return;
-            }
-
-            action(node.Value);
-            TraverseTreePreOrder(action, node.Left);
-            TraverseTreePreOrder(action, node.Right);
-        }
-
-        /// <summary>
-        /// Traverses the <see cref="BinarySearchTree{T}"/> in pre-order (NLR) and applies the delegate action to each node.
-        /// </summary>
-        /// <param name="action">The delegate action to apply to each node.</param>
-        public void TraverseTreePreOrder(Action<T> action)
-        {
-            if (action == null)
-            {
-                throw new ArgumentNullException(nameof(action));
-            }
-
-            if (_root == null)
-            {
-                return;
-            }
-
-            TraverseTreePreOrder(action, _root);
-        }
-
-        private void TraverseTreePostOrder(Action<T> action, BinarySearchTreeNode node)
-        {
-            if (node == null)
-            {
-                return;
-            }
-
-            TraverseTreePostOrder(action, node.Left);
-            TraverseTreePostOrder(action, node.Right);
-            action(node.Value);
-        }
-
-        /// <summary>
-        /// Traverses the <see cref="BinarySearchTree{T}"/> in post-order (LRN) and applies the delegate action to each node.
-        /// </summary>
-        /// <param name="action">The delegate action to apply to each node.</param>
-        public void TraverseTreePostOrder(Action<T> action)
-        {
-            if (action == null)
-            {
-                throw new ArgumentNullException(nameof(action));
-            }
-
-            if (_root == null)
-            {
-                return;
-            }
-
-            TraverseTreePostOrder(action, _root);
-        }
-
         private void TraverseBinaryTreeInOrder(Action<T> action, BinarySearchTreeNode node)
         {
             if (node == null)
@@ -585,25 +623,6 @@ namespace Keeg.SharpCollectionsLib.Collections.Trees
             TraverseBinaryTreeInOrder(action, node.Left);
             action(node.Value);
             TraverseBinaryTreeInOrder(action, node.Right);
-        }
-
-        /// <summary>
-        /// Traverses the <see cref="BinarySearchTree{T}"/> in order and applies the delegate action to each node.
-        /// </summary>
-        /// <param name="action">The delegate action to apply to each node.</param>
-        public void TraverseBinaryTreeInOrder(Action<T> action)
-        {
-            if (action == null)
-            {
-                throw new ArgumentNullException(nameof(action));
-            }
-
-            if (_root == null)
-            {
-                return;
-            }
-
-            TraverseBinaryTreeInOrder(action, _root);
         }
 
         private void TraverseBinaryTreeInReverseOrder(Action<T> action, BinarySearchTreeNode node)
@@ -618,36 +637,110 @@ namespace Keeg.SharpCollectionsLib.Collections.Trees
             TraverseBinaryTreeInReverseOrder(action, node.Left);
         }
 
-        /// <summary>
-        /// Traverses the <see cref="BinarySearchTree{T}"/> in reverse order and applies the delegate action to each node.
-        /// </summary>
-        /// <param name="action">The delegate action to apply to each node.</param>
-        public void TraverseBinaryTreeInReverseOrder(Action<T> action)
+        private void TraverseTreePostOrder(Action<T> action, BinarySearchTreeNode node)
         {
-            if (action == null)
-            {
-                throw new ArgumentNullException(nameof(action));
-            }
-
-            if (_root == null)
+            if (node == null)
             {
                 return;
             }
 
-            TraverseBinaryTreeInReverseOrder(action, _root);
+            TraverseTreePostOrder(action, node.Left);
+            TraverseTreePostOrder(action, node.Right);
+            action(node.Value);
         }
-        #endregion
+
+        private void TraverseTreePreOrder(Action<T> action, BinarySearchTreeNode node)
+        {
+            if (node == null)
+            {
+                return;
+            }
+
+            action(node.Value);
+            TraverseTreePreOrder(action, node.Left);
+            TraverseTreePreOrder(action, node.Right);
+        }
+
+        #endregion Binary Tree Specific Functions
 
         #region Internal Support Classes
+
+        public struct InOrderEnumerator : IEnumerator<T>
+        {
+            #region Instance Fields
+
+            private readonly Stack<BinarySearchTreeNode> _nodeStack;
+            private readonly BinarySearchTreeNode _root;
+            private readonly BinarySearchTree<T> _tree;
+            private readonly long _version;
+            private T _current;
+
+            #endregion Instance Fields
+
+            internal InOrderEnumerator(BinarySearchTree<T> tree)
+            {
+                _tree = tree ?? throw new ArgumentNullException(nameof(tree));
+                _root = tree._root;
+                _nodeStack = new Stack<BinarySearchTreeNode>();
+                _version = _tree._version;
+                _current = default(T);
+                StackLeftMostNodesFirst(_root);
+            }
+
+            public T Current => _current;
+            object IEnumerator.Current => _current;
+
+            public void Dispose()
+            {
+            }
+
+            public bool MoveNext()
+            {
+                if (_version != _tree._version)
+                {
+                    throw new InvalidOperationException("Collection changed during enumeration.");
+                }
+
+                if (_nodeStack.Count == 0)
+                {
+                    return false;
+                }
+
+                var topNode = _nodeStack.Pop();
+                _current = topNode.Value;
+                StackLeftMostNodesFirst(topNode.Right);
+
+                return true;
+            }
+
+            public void Reset()
+            {
+                _nodeStack.Clear();
+                StackLeftMostNodesFirst(_root);
+            }
+
+            private void StackLeftMostNodesFirst(BinarySearchTreeNode node)
+            {
+                var current = node;
+                while (current != null)
+                {
+                    _nodeStack.Push(current);
+                    current = current.Left;
+                }
+            }
+        }
+
         public struct ReverseOrderEnumerator : IEnumerator<T>
         {
             #region Instance Fields
-            private readonly BinarySearchTree<T> _tree;
-            private readonly BinarySearchTreeNode _root;
+
             private readonly Stack<BinarySearchTreeNode> _nodeStack;
+            private readonly BinarySearchTreeNode _root;
+            private readonly BinarySearchTree<T> _tree;
             private readonly long _version;
             private T _current;
-            #endregion
+
+            #endregion Instance Fields
 
             internal ReverseOrderEnumerator(BinarySearchTree<T> tree)
             {
@@ -659,17 +752,8 @@ namespace Keeg.SharpCollectionsLib.Collections.Trees
                 StackRightMostNodesFirst(_root);
             }
 
-            private void StackRightMostNodesFirst(BinarySearchTreeNode node)
-            {
-                var current = node;
-                while (current != null)
-                {
-                    _nodeStack.Push(current);
-                    current = current.Right;
-                }
-            }
-
             public T Current => _current;
+
             object IEnumerator.Current => _current;
 
             public void Dispose()
@@ -700,68 +784,15 @@ namespace Keeg.SharpCollectionsLib.Collections.Trees
                 _nodeStack.Clear();
                 StackRightMostNodesFirst(_root);
             }
-        }
 
-        public struct InOrderEnumerator : IEnumerator<T>
-        {
-            #region Instance Fields
-            private readonly BinarySearchTree<T> _tree;
-            private readonly BinarySearchTreeNode _root;
-            private readonly Stack<BinarySearchTreeNode> _nodeStack;
-            private readonly long _version;
-            private T _current;
-            #endregion
-
-            internal InOrderEnumerator(BinarySearchTree<T> tree)
-            { 
-                _tree = tree ?? throw new ArgumentNullException(nameof(tree));
-                _root = tree._root;
-                _nodeStack = new Stack<BinarySearchTreeNode>();
-                _version = _tree._version;
-                _current = default(T);
-                StackLeftMostNodesFirst(_root);
-            }
-
-            public T Current => _current;
-            object IEnumerator.Current => _current;
-
-            private void StackLeftMostNodesFirst(BinarySearchTreeNode node)
+            private void StackRightMostNodesFirst(BinarySearchTreeNode node)
             {
                 var current = node;
                 while (current != null)
                 {
                     _nodeStack.Push(current);
-                    current = current.Left;
+                    current = current.Right;
                 }
-            }
-
-            public void Dispose()
-            {
-            }
-
-            public bool MoveNext()
-            {
-                if (_version != _tree._version)
-                {
-                    throw new InvalidOperationException("Collection changed during enumeration.");
-                }
-
-                if (_nodeStack.Count == 0)
-                {
-                    return false;
-                }
-
-                var topNode = _nodeStack.Pop();
-                _current = topNode.Value;
-                StackLeftMostNodesFirst(topNode.Right);
-
-                return true;
-            }
-
-            public void Reset()
-            {
-                _nodeStack.Clear();
-                StackLeftMostNodesFirst(_root);
             }
         }
 
@@ -789,7 +820,7 @@ namespace Keeg.SharpCollectionsLib.Collections.Trees
             {
             }
 
-            #endregion
+            #endregion Constructors
 
             /// <summary>
             /// Gets if the node is a left child.
@@ -801,6 +832,7 @@ namespace Keeg.SharpCollectionsLib.Collections.Trees
             /// </summary>
             internal virtual bool IsRightChild => (Parent == null) ? false : Parent.Right == this;
         }
-        #endregion
+
+        #endregion Internal Support Classes
     }
 }
